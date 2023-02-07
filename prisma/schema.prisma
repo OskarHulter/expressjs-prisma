@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -10,9 +7,80 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Todo {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  text      String
-  completed Boolean
+model Price {
+  id          Int           @id @default(autoincrement())
+  close       Float
+  high        Float
+  low         Float
+  open        Float
+  Candlestick Candlestick[]
 }
+
+model Volume {
+  id           Int           @id @default(autoincrement())
+  volume       Float
+  vwap         Float
+  transactions Int
+  Candlestick  Candlestick[]
+}
+
+model Candlestick {
+  timestamp BigInt @id
+  price     Price  @relation(fields: [priceId], references: [id])
+  volume    Volume @relation(fields: [volumeId], references: [id])
+  asset     Asset  @relation(fields: [tickerId], references: [id])
+  tickerId  Int
+  priceId   Int
+  volumeId  Int
+
+  @@unique([timestamp])
+}
+
+model Asset {
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(25)
+  description  String        @db.VarChar(200)
+  ticker       String        @db.VarChar(25)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  published    Boolean       @default(true)
+  PriceHistory Candlestick[]
+  categories   Category[]
+  tags         String[]
+
+  @@unique([ticker])
+}
+
+model Category {
+  id     Int      @id @default(autoincrement())
+  name   String   @db.VarChar(25)
+  assets Asset[]
+  tags   String[]
+
+  @@unique([name])
+}
+
+model User {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(25)
+  role String @map("Role")
+}
+
+enum Role {
+  admin
+  user
+}
+
+// model Indicator {
+//   id       Int    @id @default(autoincrement())
+//   title    String
+//   value    Float
+//   settings Int
+// }
+// model Sector {
+//   id     Int     @id @default(autoincrement())
+//   title  String
+//   assets Asset[] @relation
+// }
+//   sector       Sector        @relation(references: [id], fields: [sectorId])
+//   sectorId     Int
