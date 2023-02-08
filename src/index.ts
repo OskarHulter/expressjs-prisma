@@ -21,36 +21,36 @@ app.get("/assets", async (req, res) => {
 app.post("/assets", async (req, res) => {
   const asset = await prisma.asset.create({
     data: {
-      text: req.body.text ?? "Empty asset",
+      ...req.body
     },
   })
 
   return res.json(asset)
 })
 
-app.get("/assets/:id", async (req, res) => {
-  const id = req.params.id
+app.get("/assets/:ticker", async (req, res) => {
+  const ticker = req.params.ticker
   const asset = await prisma.asset.findUnique({
-    where: { id },
+    where: { ticker },
   })
 
   return res.json(asset)
 })
 
-app.put("/assets/:id", async (req, res) => {
-  const id = req.params.id
+app.put("/assets/:ticker", async (req, res) => {
+  const ticker = req.params.ticker
   const asset = await prisma.asset.update({
-    where: { id },
+    where: { ticker },
     data: req.body,
   })
 
   return res.json(asset)
 })
 
-app.delete("/assets/:id", async (req, res) => {
-  const id = req.params.id
+app.delete("/assets/:ticker", async (req, res) => {
+  const ticker = req.params.ticker
   await prisma.asset.delete({
-    where: { id },
+    where: { ticker },
   })
 
   return res.send({ status: "ok" })
@@ -63,7 +63,7 @@ app.get("/", async (req, res) => {
   <h2>Available Routes</h2>
   <pre>
     GET, POST /assets
-    GET, PUT, DELETE /assets/:id
+    GET, PUT, DELETE /assets/:ticker
   </pre>
   `.trim(),
   )

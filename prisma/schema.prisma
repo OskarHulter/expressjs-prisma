@@ -23,9 +23,9 @@ model Candlestick {
 }
 
 model Asset {
-  name         String        @db.VarChar(25)
-  description  String        @db.VarChar(200)
   ticker       String        @db.VarChar(25)
+  exchange     String?       @db.VarChar(25)
+  description  String?       @db.VarChar(200)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   published    Boolean       @default(true)
