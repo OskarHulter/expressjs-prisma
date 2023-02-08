@@ -2,7 +2,7 @@
   "name": "expressjs-prisma",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Jake Runzer",
+  "author": "Oskar Hulter",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.ts",
@@ -14,10 +14,13 @@
     "generate": "prisma generate"
   },
   "dependencies": {
+    "@alpacahq/alpaca-trade-api": "^2.16.1",
     "@mathieuc/tradingview": "^3.3.3",
     "@prisma/client": "^4.10.0",
     "axios": "^1.3.2",
+    "ccxt": "^2.6.36",
     "express": "^4.18.2",
+    "finnhub": "^1.2.16",
     "zod": "^3.20.2"
   },
   "devDependencies": {

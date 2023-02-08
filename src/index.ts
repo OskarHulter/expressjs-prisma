@@ -1,6 +1,9 @@
 import { PrismaClient } from '@prisma/client'
 import express from "express"
-
+const ccxt = require('ccxt')
+let kraken = new ccxt.kraken()
+let bitfinex = new ccxt.bitfinex({ verbose: true })
+let huobipro = new ccxt.huobipro()
 const prisma = new PrismaClient()
 
 const app = express()
@@ -9,6 +12,28 @@ const port = process.env.PORT || 3000
 app.use(express.json())
 app.use(express.raw({ type: "application/vnd.custom-type" }))
 app.use(express.text({ type: "text/html" }))
+
+app.get("/sync", async (req, res) => {
+  console.log(kraken.id, await kraken.loadMarkets())
+  console.log(bitfinex.id, await bitfinex.loadMarkets())
+  console.log(huobipro.id, await huobipro.loadMarkets())
+
+  console.log(kraken.id, await kraken.fetchOrderBook(kraken.symbols[0]))
+  console.log(bitfinex.id, await bitfinex.fetchTicker('BTC/USD'))
+  console.log(huobipro.id, await huobipro.fetchTrades('ETH/USDT'))
+  console.log(req.body)
+  return res.json(req.body)
+})
+
+app.post("/sync", async (req, res) => {
+  // const asset = await prisma.asset.create({
+  //   data: {
+  //     ...req.body
+  //   },
+  // })
+  console.log(req.body)
+  return res.json(req.body)
+})
 
 app.get("/assets", async (req, res) => {
   const assets = await prisma.asset.findMany({
