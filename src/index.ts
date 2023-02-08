@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from '@prisma/client'
 import express from "express"
 
 const prisma = new PrismaClient()
@@ -10,48 +10,46 @@ app.use(express.json())
 app.use(express.raw({ type: "application/vnd.custom-type" }))
 app.use(express.text({ type: "text/html" }))
 
-app.get("/todos", async (req, res) => {
-  const todos = await prisma.todo.findMany({
+app.get("/assets", async (req, res) => {
+  const assets = await prisma.asset.findMany({
     orderBy: { createdAt: "desc" },
   })
 
-  res.json(todos)
+  res.json(assets)
 })
 
-app.post("/todos", async (req, res) => {
-  const todo = await prisma.todo.create({
+app.post("/assets", async (req, res) => {
+  const asset = await prisma.asset.create({
     data: {
-      completed: false,
-      createdAt: new Date(),
-      text: req.body.text ?? "Empty todo",
+      text: req.body.text ?? "Empty asset",
     },
   })
 
-  return res.json(todo)
+  return res.json(asset)
 })
 
-app.get("/todos/:id", async (req, res) => {
+app.get("/assets/:id", async (req, res) => {
   const id = req.params.id
-  const todo = await prisma.todo.findUnique({
+  const asset = await prisma.asset.findUnique({
     where: { id },
   })
 
-  return res.json(todo)
+  return res.json(asset)
 })
 
-app.put("/todos/:id", async (req, res) => {
+app.put("/assets/:id", async (req, res) => {
   const id = req.params.id
-  const todo = await prisma.todo.update({
+  const asset = await prisma.asset.update({
     where: { id },
     data: req.body,
   })
 
-  return res.json(todo)
+  return res.json(asset)
 })
 
-app.delete("/todos/:id", async (req, res) => {
+app.delete("/assets/:id", async (req, res) => {
   const id = req.params.id
-  await prisma.todo.delete({
+  await prisma.asset.delete({
     where: { id },
   })
 
@@ -61,11 +59,11 @@ app.delete("/todos/:id", async (req, res) => {
 app.get("/", async (req, res) => {
   res.send(
     `
-  <h1>Todo REST API</h1>
+  <h1>asset REST API</h1>
   <h2>Available Routes</h2>
   <pre>
-    GET, POST /todos
-    GET, PUT, DELETE /todos/:id
+    GET, POST /assets
+    GET, PUT, DELETE /assets/:id
   </pre>
   `.trim(),
   )
