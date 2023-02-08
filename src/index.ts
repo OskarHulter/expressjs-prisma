@@ -18,9 +18,9 @@ app.get("/sync", async (req, res) => {
   console.log(bitfinex.id, await bitfinex.loadMarkets())
   console.log(huobipro.id, await huobipro.loadMarkets())
 
-  console.log(kraken.id, await kraken.fetchOrderBook(kraken.symbols[0]))
+  //console.log(kraken.id, await kraken.fetchOrderBook(kraken.symbols[0]))
   console.log(bitfinex.id, await bitfinex.fetchTicker('BTC/USD'))
-  console.log(huobipro.id, await huobipro.fetchTrades('ETH/USDT'))
+  //console.log(huobipro.id, await huobipro.fetchTrades('ETH/USDT'))
   console.log(req.body)
   return res.json(req.body)
 })

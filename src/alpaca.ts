@@ -1,9 +1,6 @@
-//const Alpaca = require('@alpacahq/alpaca-trade-api')
-import Alpaca from '@alpacahq/alpaca-trade-api'
-import { CryptoBar } from '@alpacahq/alpaca-trade-api/dist/resources/datav2/entityv2'
-import { getCryptoBars } from '@alpacahq/alpaca-trade-api/dist/resources/datav2/rest_v2'
-import { Asset } from '@prisma/client'
-import { config } from 'process'
+const Alpaca = require('@alpacahq/alpaca-trade-api')
+//import Alpaca from '@alpacahq/alpaca-trade-api'
+
 
 const alpaca = new Alpaca({
   keyId: process.env.ALPACA_API_ID,
@@ -11,7 +8,7 @@ const alpaca = new Alpaca({
   paper: true,
 })
 
-alpaca.getAccount().then((account) => {
+alpaca.getAccount().then((account: any) => {
   console.log('Current Account:', account)
 })
 export const assets = alpaca.getAssets({
@@ -27,13 +24,13 @@ const websocket = alpaca.data_stream_v2
 websocket.onConnect(() => {
   websocket.subscribeForTrades(["AAPL"])
 })
-websocket.onStateChange((status) => {
+websocket.onStateChange((status: any) => {
   console.log("Status:", status)
 })
-websocket.onError((err) => {
+websocket.onError((err: any) => {
   console.log("Error:", err)
 })
-websocket.onStockTrade((trade) => {
+websocket.onStockTrade((trade: any) => {
   console.log("Trade:", trade)
 })
 websocket.connect()
